@@ -18,8 +18,8 @@ from scipy import signal
 
 ##################################################################
 
-CALIB = 1055/550 # pixel/wavelength calibration from mercury lamp (from calib.py)
-STANDARD = "e02m.csv"	# standard spectrum using EO2 mirror/retroreflector
+CALIB = 829/475 # pixel/wavelength calibration from mercury lamp (from calib.py)
+STANDARD = "standardspectrum.csv"	# standard spectrum using EO2 mirror/retroreflector
 
 ##################################################################
 
@@ -48,7 +48,7 @@ def calibrate(spec, calib):
 		intensities.append(spec[pix][1])
 		wav.append(w)
 	# standardise
-	standardised = standardise(intensities)
+	# standardised = standardise(intensities)
 	# normalise 0-1 scaling
 	imax = max(standardised)
 	imin = min(standardised)
