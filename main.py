@@ -100,7 +100,7 @@ def main(filename):
 		plt.title("NAE Spectrum - file: %s" % filename)
 		plt.xlabel("Wavelength (nm)")
 		plt.ylabel("Intensity")
-		plt.savefig('graph.jpg')
+		plt.savefig(filename[:-4]+'graph.jpg')
 		plt.show()
 		"""
 		# add spectrum to spec database

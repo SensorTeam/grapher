@@ -35,20 +35,23 @@ def standardise(intensities):
 	return standardised
 
 
-# Only get the most relevant parts of the spectrum
+# Only get the relevant parts of the spectrum
+# Calibrate to convert pixels to wavelength, standardise as percentage of light source
+# Normalise 0-1 scaling
 def calibrate(spec, calib):
 	# Calibrate using values from mercury lamp
 	pixels, input_intensities = zip(*spec)
 	wav = []
 	intensities = []
 	# for each wavelength, find the associated pixel and intensity
-	for w in range(400,700):
+	for w in range(400,800):
 		pix = round(w*calib)
 		#i = spec[pix-adjust][1]
 		intensities.append(spec[pix][1])
 		wav.append(w)
 	# standardise
-	# standardised = standardise(intensities)
+	#standardised = standardise(intensities)
+	standardised = intensities
 	# normalise 0-1 scaling
 	imax = max(standardised)
 	imin = min(standardised)
@@ -59,6 +62,7 @@ def calibrate(spec, calib):
 	for j in range(len(wav)):
 		result.append([wav[j], smooth[j]])
 	return result
+
 
 # Convert RGB to HSV and return hue
 def get_hue(colour):
@@ -96,7 +100,6 @@ def eye_spectrum(y, left, right, image):
 		# spectrum is indexed from 0 at the centre of the eye
 		spectrum.insert(0, [y-i, intensity])
 	# calibrate using calibration from mercury lamp
-	#print(spectrum)
 	final_spec = calibrate(spectrum, CALIB)
 	return final_spec
 
@@ -117,6 +120,7 @@ def get_spectrum(pair, image):
 	spec1 = eye_spectrum(y1, math.floor(eye1[2][0]-width1), cen, image)
 	spec2 = eye_spectrum(y2, cen, math.ceil(eye2[3][0]+width2)+1, image)
 	return [spec1, spec2]
+
 
 # Gets brightest pixel row
 def get_centre(eye, image):

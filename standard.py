@@ -35,8 +35,8 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 # boundaries of signal - set manually
 low = 1516
 high = 1534
-left = 1356
-right = 1373
+left = 1354
+right = 1392
 
 
 ### look for highest brightness pixel row from signal
@@ -86,7 +86,7 @@ def calibrate(spec):
 	# normalise 0-1 scaling
 	imax = max(intensities)
 	imin = min(intensities)
-	normal = [(i-imin)/(imax-imin) for i in intensities]
+	normal = [(i/imax)*10 for i in intensities]
 	# smooth using Savitzky Golay
 	smooth = signal.savgol_filter(normal, 11, 3)
 	result = []
