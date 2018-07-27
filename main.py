@@ -48,6 +48,22 @@ def main(filename):
 	print("------- RESULTS -------")
 	print("SEARCHED " + str(fname))
 	print("FOUND " + str(num_pairs) + " PAIR/S")
+
+
+	colours = [(255,0,0),(0,0,255),(0,255,0),(255,255,0),(255,0,255),(0,255,255),(100,200,100),(100,0,200),(200,100,200),(200,100,100)]
+	i=0
+	# circle around the pairs found in the image
+	for pair in con_pairs:
+		i+=1
+		col = colours[i%10]
+		if len(pair)==2:
+			for eye in pair:
+				(cX, cY), radius = cv2.minEnclosingCircle(eye)
+				cv2.circle(new, (int(cX), int(cY)), int(radius+8), col, 5)
+		else:
+			pass
+	# save circled image
+	cv2.imwrite(fname[0:-4]+"_circled.jpg", new)
 	"""
 	# set up new databases
 

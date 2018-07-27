@@ -36,7 +36,8 @@ def standardise(intensities):
 
 
 # Only get the relevant parts of the spectrum
-# Calibrate to convert pixels to wavelength, standardise as percentage of light source
+# Calibrate to convert pixels to wavelength
+# Standardise as percentage of light source
 # Normalise 0-1 scaling
 def calibrate(spec, calib):
 	# Calibrate using values from mercury lamp
@@ -44,18 +45,19 @@ def calibrate(spec, calib):
 	wav = []
 	intensities = []
 	# for each wavelength, find the associated pixel and intensity
-	for w in range(400,800):
+	for w in range(400,700):
 		pix = round(w*calib)
 		#i = spec[pix-adjust][1]
 		intensities.append(spec[pix][1])
 		wav.append(w)
 	# standardise
-	#standardised = standardise(intensities)
-	standardised = intensities
+	standardised = standardise(intensities)
+	#standardised = intensities
 	# normalise 0-1 scaling
 	imax = max(standardised)
 	imin = min(standardised)
-	normal = [(i-imin)/(imax-imin) for i in standardised]
+	normal = [(i-imin)/(imax-imin) for i in standardised]		# 0-1 scaling
+	#normal = [i/imax for i in standardised]					# maximum scaling
 	# smooth using Savitzky Golay
 	smooth = signal.savgol_filter(normal, 11, 3)
 	result = []
