@@ -24,13 +24,13 @@ import csv
 import cv2
 import os
 
-"""
+
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", help = "path to the normal image file")
 #ap.add_argument("-c", "--class", help = "class for training data")
 args = vars(ap.parse_args())
-"""
+
 
 def main(filename):
 	# load the image
@@ -126,3 +126,5 @@ def main(filename):
 		writer.writerow([fname,' ',ID,'R']+list(y2))
 		f2.close()
 		"""
+
+main(args["image"])

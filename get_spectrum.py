@@ -19,7 +19,8 @@ from scipy import signal
 ##################################################################
 
 CALIB = 829/475 # pixel/wavelength calibration from mercury lamp (from calib.py)
-STANDARD = "standardspectrum.csv"	# standard spectrum using EO2 mirror/retroreflector
+CALIB = 1.754310483		# mercury lamp, 3 point calibration
+STANDARD = "standardisation/standardspectrum.csv"	# standard spectrum using EO2 mirror/retroreflector
 
 ##################################################################
 
@@ -51,13 +52,14 @@ def calibrate(spec, calib):
 		intensities.append(spec[pix][1])
 		wav.append(w)
 	# standardise
-	standardised = standardise(intensities)
-	#standardised = intensities
+	#standardised = standardise(intensities)
+	standardised = intensities
 	# normalise 0-1 scaling
 	imax = max(standardised)
 	imin = min(standardised)
-	normal = [(i-imin)/(imax-imin) for i in standardised]		# 0-1 scaling
+	#normal = [(i-imin)/(imax-imin) for i in standardised]		# 0-1 scaling
 	#normal = [i/imax for i in standardised]					# maximum scaling
+	normal = standardised
 	# smooth using Savitzky Golay
 	smooth = signal.savgol_filter(normal, 11, 3)
 	result = []
@@ -90,6 +92,7 @@ def get_hue(colour):
 # Intensity is total intensity all pixels in that row
 def eye_spectrum(y, left, right, image):
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+	cv2.imwrite("gray.jpg", gray)
 	#[x, y, extL, extR, extT, extB] = eye
 	spectrum = []
 	# for each row in the image until centre of eye
@@ -98,12 +101,15 @@ def eye_spectrum(y, left, right, image):
 		# for each pixel in section containing spectrum
 		for j in range(left, right):
 			# get brightness
-			intensity += gray[i][j]
+			# intensity += gray[i][j]
+			intensity += math.sqrt((image[i,j][0])**2+(image[i,j][1])**2+(image[i,j][2])**2)
 		# spectrum is indexed from 0 at the centre of the eye
 		spectrum.insert(0, [y-i, intensity])
 	# calibrate using calibration from mercury lamp
 	final_spec = calibrate(spectrum, CALIB)
-	return final_spec
+	#for item in spectrum:
+	#	print(item)
+	return spectrum
 
 
 # Calls eye_spectrum() for each eye
@@ -119,8 +125,8 @@ def get_spectrum(pair, image):
 	y1 = get_centre(eye1, image)
 	y2 = get_centre(eye2, image)
 
-	spec1 = eye_spectrum(y1, math.floor(eye1[2][0]-width1), cen, image)
-	spec2 = eye_spectrum(y2, cen, math.ceil(eye2[3][0]+width2)+1, image)
+	spec1 = eye_spectrum(y1, math.floor(eye1[2][0]-width1/2), cen, image)
+	spec2 = eye_spectrum(y2, cen, math.ceil(eye2[3][0]+width2/2)+1, image)
 	return [spec1, spec2]
 
 
