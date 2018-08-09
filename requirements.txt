@@ -19,7 +19,6 @@ opencv-python==3.4.0.12
 pandas==0.22.0
 Pillow==5.1.0
 plotly==2.5.1
-pygame==1.9.4.dev0
 pyparsing==2.2.0
 python-dateutil==2.7.2
 pytz==2018.4
