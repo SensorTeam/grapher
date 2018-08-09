@@ -2,4 +2,5 @@ venv/
 *.pyc
 ignore/
 superceded/
-data/
+data/Photos/
+data/graphs
