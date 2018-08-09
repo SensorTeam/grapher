@@ -24,21 +24,14 @@ import os
 import warnings
 warnings.filterwarnings(action="ignore", module="scipy", message="^internal gelsd")
 
-
-# construct the argument parse and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", help = "path to the normal image file")
-ap.add_argument("-c", "--class", help = "class for training data")
-args = vars(ap.parse_args())
-
-
 def main(filename):
 	# load the image
 	image = cv2.imread(filename)
 	orig = image.copy()
 	new = image.copy()
+
 	# for training data
-	ID = args["class"]
+	#ID = args["class"]
 
 	# find pairs of eyes
 	contours = find_eye(image)
@@ -67,15 +60,15 @@ def main(filename):
 	cv2.imwrite(fname[0:-4]+"_circled.jpg", new)
 	
 	# set up new databases
-	"""
+
 	# spectrum
 	fields2 = ['file','ID','L/R']
 	fields2 = fields2 + list(range(400, 700))
-	f2 = open("data/spec.csv", 'w')
+	f2 = open("data/spectest.csv", 'w')
 	writer = csv.writer(f2)
 	writer.writerow(fields2)
 	f2.close()
-	"""
+	
 
 	# For each pair
 	for i in range(0, num_pairs):
@@ -118,14 +111,14 @@ def main(filename):
 		plt.xlabel("Wavelength (nm)")
 		plt.ylabel("Intensity")
 		plt.savefig(filename[:-4]+'graph.jpg')
-		#plt.show()
-		
+		plt.show()
+
 		# add spectrum to spec database
-		f2 = open("data/spec.csv", 'a')
+		f2 = open("data/spectest.csv", 'a')
 		writer = csv.writer(f2)
-		writer.writerow([fname,ID,'L']+list(y1))
-		writer.writerow([fname,ID,'R']+list(y2))
+		writer.writerow([fname,0,'L']+list(y1))
+		writer.writerow([fname,0,'R']+list(y2))
 		f2.close()
 		
 
-main(args["image"])
+

@@ -18,6 +18,7 @@ at known wavelengths. For example, for a mercury lamp, use peak at
 import matplotlib.pyplot as plt
 import cv2
 import argparse
+import math
 
 # Parse arguments
 ap = argparse.ArgumentParser()
@@ -30,10 +31,10 @@ image = cv2.imread(filename)
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # boundaries of signal - set manually
-low = 1540
-high = 1588
-left = 1224
-right = 1265
+low = 1640
+high = 1653
+left = 1222
+right = 1236
 
 
 ### look for highest brightness pixel row from signal
@@ -42,7 +43,9 @@ pix = []
 for i in range(low, high):
 	intensity = 0
 	for j in range(left,right):
-		intensity += gray[i][j]
+		#intensity += gray[i][j]
+		#intensity += image[i,j][0]+image[i,j][1]+image[i,j][2]
+		intensity += math.sqrt(0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2))
 	intensities.append(intensity)
 	pix.append(i)
 
@@ -55,7 +58,7 @@ x = (left+right)/2
 intensities = []
 pix = []
 # write result spectra to file
-output = open("calibrationspectrum.csv", "w")
+output = open("mercuryspectrum3.csv", "w")
 output.write("pixel,intensity\n")
 
 # for each row in the image until centre of eye
@@ -64,7 +67,9 @@ for i in range(0, y+1):
 	# for each pixel in section containing spectrum
 	for j in range(left, right):
 		# get brightness
-		intensity += gray[i][j]
+		#intensity += gray[i][j]
+		#intensity += 0.33*image[i,j][0]+0.33*image[i,j][1]+0.34*image[i,j][2]
+		intensity += math.sqrt(0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2))
 	pix.insert(0, y-i)
 	intensities.insert(0, intensity)
 	# spectrum is indexed from 0 at the centre of the eye
@@ -77,5 +82,5 @@ plt.plot(pix, intensities)
 plt.title("Calibration Spectrum")
 plt.xlabel("Pixels")
 plt.ylabel("Intensity")
-plt.savefig("calibrationspectrum.jpg")
+plt.savefig("mercuryspectrum3.jpg")
 plt.show()

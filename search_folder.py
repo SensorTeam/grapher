@@ -1,5 +1,6 @@
 import os
 from main import *
+from pcasvm import *
 import cv2
 
 path = "../scanner/data/"

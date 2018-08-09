@@ -23,7 +23,7 @@ import math
 
 GRADIUS = 1		# gaussian blur radius, must be odd
 
-THRESH = 220		# minimum brightness
+THRESH = 180		# minimum brightness
 
 MINAREA = 10			# refine mask sizes
 MAXAREA = 30000
