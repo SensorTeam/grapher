@@ -45,7 +45,7 @@ for i in range(low, high):
 	for j in range(left,right):
 		#intensity += gray[i][j]
 		#intensity += image[i,j][0]+image[i,j][1]+image[i,j][2]
-		intensity += 0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2)
+		intensity += math.sqrt(0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2))
 	intensities.append(intensity)
 	pix.append(i)
 
@@ -69,7 +69,7 @@ for i in range(0, y+1):
 		# get brightness
 		#intensity += gray[i][j]
 		#intensity += 0.33*image[i,j][0]+0.33*image[i,j][1]+0.34*image[i,j][2]
-		intensity += 0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2)
+		intensity += math.sqrt(0.0722*((image[i,j][0])**2)+0.7152*((image[i,j][1])**2)+0.2126*((image[i,j][2])**2))
 	pix.insert(0, y-i)
 	intensities.insert(0, intensity)
 	# spectrum is indexed from 0 at the centre of the eye

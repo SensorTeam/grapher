@@ -20,6 +20,7 @@ from scipy import signal
 
 CALIB = 829/475 # pixel/wavelength calibration from mercury lamp (from calib.py)
 CALIB = 1.754310483		# mercury lamp, 3 point calibration
+#CALIB = 665/546.1		# iphone video from thesis
 STANDARD = "standardisation/standardspectrum.csv"	# standard spectrum using EO2 mirror/retroreflector
 
 ##################################################################
@@ -57,9 +58,9 @@ def calibrate(spec, calib):
 	# normalise 0-1 scaling
 	imax = max(standardised)
 	imin = min(standardised)
-	#normal = [(i-imin)/(imax-imin) for i in standardised]		# 0-1 scaling
+	normal = [(i-imin)/(imax-imin) for i in standardised]		# 0-1 scaling
 	#normal = [i/imax for i in standardised]					# maximum scaling
-	normal = standardised
+	#normal = standardised
 	# smooth using Savitzky Golay
 	smooth = signal.savgol_filter(normal, 11, 3)
 	result = []
@@ -92,7 +93,6 @@ def get_hue(colour):
 # Intensity is total intensity all pixels in that row
 def eye_spectrum(y, left, right, image):
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	cv2.imwrite("gray.jpg", gray)
 	#[x, y, extL, extR, extT, extB] = eye
 	spectrum = []
 	# for each row in the image until centre of eye
@@ -101,15 +101,13 @@ def eye_spectrum(y, left, right, image):
 		# for each pixel in section containing spectrum
 		for j in range(left, right):
 			# get brightness
-			# intensity += gray[i][j]
+			#intensity += gray[i][j]
 			intensity += math.sqrt((image[i,j][0])**2+(image[i,j][1])**2+(image[i,j][2])**2)
 		# spectrum is indexed from 0 at the centre of the eye
 		spectrum.insert(0, [y-i, intensity])
 	# calibrate using calibration from mercury lamp
 	final_spec = calibrate(spectrum, CALIB)
-	#for item in spectrum:
-	#	print(item)
-	return spectrum
+	return final_spec
 
 
 # Calls eye_spectrum() for each eye
