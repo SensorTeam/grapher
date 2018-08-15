@@ -10,7 +10,7 @@ Extracts spectra from new image and classifies using PCA and SVM
 # Usage
 
 1. Setup a virtual environment using the command `virtualenv venv`
-2. Activate the virtual environment using `source venv/bin/activate`
+2. Activate the virtual environment using `source venv/bin/activate` (MacOS) or `. .\venv\Scripts\activate` (Windows)
 3. Install package dependencies using `pip install -r requirements.txt`
 4. Execute using the following
 
